@@ -49,7 +49,7 @@ print_s_registers:
         la $a0, space
         li $v0, 4
         syscall
-
+        
         # print s1, followed by a space
         move $a0, $s1
         li $v0, 1
@@ -117,7 +117,7 @@ sp_sanity_check_1:
         li $v0, 1
         syscall
         jr $ra
-
+        
 sp_sanity_check_2:
         la $a0, sp_sanity_check_prompt_2
         li $v0, 4
@@ -134,7 +134,7 @@ sanity_check_end:
 
         jal sp_sanity_check_2
         jal print_s_registers
-
+        
         # restore $ra and return
         lw $ra, 0($sp)
         addi $sp, $sp, 4
@@ -147,7 +147,7 @@ sanity_check_start:
 
         jal sp_sanity_check_1
         jal print_s_registers
-
+        
         # restore $ra and return
         lw $ra, 0($sp)
         addi $sp, $sp, 4
