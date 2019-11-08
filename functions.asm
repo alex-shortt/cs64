@@ -116,7 +116,7 @@ Exit:
 
 PrintReverse:
     #TODO: write your code here, $a0 stores the address of the array, $a1 stores the length of the array
-    addiu $sp, $sp, -12
+    addiu $sp, $sp, -16
     sw $ra, 0($sp)
     sw $s0, 4($sp)
     sw $s1, 8($sp)
@@ -143,7 +143,7 @@ PrintReverse:
     lw $s0, 4($sp)
     lw $s1, 8($sp)
     lw $s2, 12($sp)
-    addiu $sp, $sp, 4
+    addiu $sp, $sp, 16
 
     # Do not remove this line
     jr      $ra
