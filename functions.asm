@@ -16,14 +16,14 @@ convention:
     .asciiz "\nConvention Check\n"
 
 myArray:
-	.word 0 33 123 -66 332 -1 -223 453 9 45 -78 -14  
+	.word 0 33 123 -66 332 -1 -223 453 9 45 -78 -14
 
 #Text Area (i.e. instructions)
 .text
 
 main:
-    ori     $v0, $0, 4          
-    la      $a0, dispArray 
+    ori     $v0, $0, 4
+    la      $a0, dispArray
     syscall
 
     ori     $s1, $0, 12
@@ -31,7 +31,7 @@ main:
 
     add     $a1, $0, $s1
     add     $a0, $0, $s0
- 
+
     jal     DispArray
 
     ori     $s2, $0, 0
@@ -40,7 +40,7 @@ main:
     ori     $s5, $0, 0
     ori     $s6, $0, 0
     ori     $s7, $0, 0
-    
+
     add     $a1, $0, $s1
     add     $a0, $0, $s0
 
@@ -60,7 +60,7 @@ main:
     j       Exit
 
 DispArray:
-    addi    $t0, $0, 0 
+    addi    $t0, $0, 0
     add     $t1, $0, $a0
 
 dispLoop:
@@ -78,13 +78,13 @@ dispLoop:
     syscall
 
     addi    $t0, $t0, 1
-    j       dispLoop    
+    j       dispLoop
 
 dispend:
     ori     $v0, $0, 4
     la      $a0, newline
     syscall
-    jr      $ra 
+    jr      $ra
 
 ConventionCheck:
     addi    $t0, $0, -1
@@ -107,7 +107,7 @@ ConventionCheck:
     addi $k0, $zero, -1
     addi $k1, $zero, -1
     jr      $ra
-    
+
 Exit:
     ori     $v0, $0, 10
     syscall
@@ -116,6 +116,34 @@ Exit:
 
 PrintReverse:
     #TODO: write your code here, $a0 stores the address of the array, $a1 stores the length of the array
+    addiu $sp, $sp, -12
+    sw $ra, 0($sp)
+    sw $s0, 4($sp)
+    sw $s1, 8($sp)
+    sw $s2, 12($sp)
+
+    move $s0, $a0
+    move $s1, $a1
+
+    loop:
+    addi $s1, $s1, -1
+
+    sll $s2, $s1, 2
+    addu $s2, $s0, $s2
+
+    li $v0, 1
+    lw $a0, 0($s2)
+    syscall
+
+    jal ConventionCheck
+
+    bne $s1, $zero, loop
+
+    lw $ra, 0($sp)
+    lw $s0, 4($sp)
+    lw $s1, 8($sp)
+    lw $s2, 12($sp)
+    addiu $sp, $sp, 4
 
     # Do not remove this line
     jr      $ra
