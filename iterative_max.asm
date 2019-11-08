@@ -16,14 +16,14 @@ convention:
     .asciiz "\nConvention Check\n"
 
 myArray:
-	.word 0 33 123 -66 332 -1 -223 453 9 45 -78 -14  
+	.word 0 33 123 -66 332 -1 -223 453 9 45 -78 -14
 
 #Text Area (i.e. instructions)
 .text
 
 main:
-    ori     $v0, $0, 4          
-    la      $a0, dispArray 
+    ori     $v0, $0, 4
+    la      $a0, dispArray
     syscall
 
     ori     $s1, $0, 12
@@ -31,7 +31,7 @@ main:
 
     add     $a1, $0, $s1
     add     $a0, $0, $s0
- 
+
     jal     DispArray
 
     ori     $s2, $0, 0
@@ -40,7 +40,7 @@ main:
     ori     $s5, $0, 0
     ori     $s6, $0, 0
     ori     $s7, $0, 0
-    
+
     add     $a1, $0, $s1
     add     $a0, $0, $s0
 
@@ -60,7 +60,7 @@ main:
     j       Exit
 
 DispArray:
-    addi    $t0, $0, 0 
+    addi    $t0, $0, 0
     add     $t1, $0, $a0
 
 dispLoop:
@@ -78,13 +78,13 @@ dispLoop:
     syscall
 
     addi    $t0, $t0, 1
-    j       dispLoop    
+    j       dispLoop
 
 dispend:
     ori     $v0, $0, 4
     la      $a0, newline
     syscall
-    jr      $ra 
+    jr      $ra
 
 ConventionCheck:
     addi    $t0, $0, -1
@@ -107,7 +107,7 @@ ConventionCheck:
     addi $k0, $zero, -1
     addi $k1, $zero, -1
     jr      $ra
-    
+
 Exit:
     ori     $v0, $0, 10
     syscall
@@ -116,6 +116,62 @@ Exit:
 
 IterativeMax:
     #TODO: write your code here, $a0 stores the address of the array, $a1 stores the length of the array
+    addiu $sp, $sp, 20
+    sw $ra, 0($sp)
+    sw $s0, 4($sp)
+    sw $s1, 8($sp)
+    sw $s2, 12($sp)
+    sw $s3, 16($sp)
+
+    li $s0, 0 #index
+    move $s1, $a0 #address
+    move $s2, $a1 #length
+    lw $s3, 0($s1) #max
+
+    loop:
+
+    # get value at index
+    sll $t0, $s0, 2 # address at current index
+    addu $t0, $t0, $s1
+    lw $t3, 0($t0) #value at current index
+
+    # print val at index
+    li $v0, 1
+    move $a0, $t3
+    syscall
+
+    # test for max
+    slt $t1, $s3, $t3
+    beq $t1, $zero, skip_set_max
+
+    #set max valaue
+    move $s3, $t3
+
+    skip_set_max:
+
+    # print new line
+    li $v0, 4
+    la $a0, newline
+    syscall
+
+    # print max value
+    li $v0, 1
+    move $a0, $s3
+    syscall
+
+    # check
+    jal ConventionCheck
+
+    # index++ and loop
+    addi $s0, $s0, 1
+    bne $s0, $s2, loop
+
+    lw $s3, 16($sp)
+    lw $s2, 12($sp)
+    lw $s1, 8($sp)
+    lw $s0, 4($sp)
+    lw $ra, 0($sp)
+    addiu $sp, $sp, -20
 
     # Do not remove this line
     jr      $ra
