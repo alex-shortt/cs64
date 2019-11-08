@@ -44,6 +44,7 @@ struct Test TESTS[NUM_TEST_CASES] = {
 int runTest(struct Test* test) {
   mipsinstruction* exp = &test->expectedOutput;
   mipsinstruction got = decode(test->input);
+  printf("%d\n", got.immediate);
   return (exp->funct == got.funct &&
           exp->immediate == got.immediate &&
           exp->rd == got.rd &&
@@ -51,12 +52,12 @@ int runTest(struct Test* test) {
           exp->rs == got.rs &&
           exp->opcode == got.opcode);
 }
-          
+
 int main(int argc, char** argv) {
   unsigned int testNum;
   unsigned int numPassed = 0;
   unsigned int numFailed = 0;
-  
+
   for (testNum = 0; testNum < NUM_TEST_CASES; ++testNum) {
     if (runTest(&TESTS[testNum])) {
       numPassed++;
